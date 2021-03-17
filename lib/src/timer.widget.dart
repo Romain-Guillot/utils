@@ -1,5 +1,66 @@
 import 'package:flutter/material.dart';
 
+
+enum _TimerRunningEnum {
+  playing,
+  paused,
+  finished,
+}
+
+
+class TimerState extends ChangeNotifier {
+
+  double current = 0;
+  _TimerRunningEnum running = _TimerRunningEnum.playing;
+
+  bool get isPlaying => running == _TimerRunningEnum.playing;
+  bool get isPaused => running == _TimerRunningEnum.paused;
+  bool get isFinished => running == _TimerRunningEnum.finished;
+
+  void pause() {
+    running = _TimerRunningEnum.paused;
+    notifyListeners();
+  }
+
+  void play() {
+    running = _TimerRunningEnum.playing;
+    notifyListeners();
+  }
+
+  void finished() {
+    running = _TimerRunningEnum.finished;
+    notifyListeners();
+  }
+}
+
+
+class TimerScope extends StatelessWidget {
+  const TimerScope({
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+
+  static Map<Key, TimerState> _states = {};
+  static TimerState of(Key? key) {
+    if (key == null) {
+      return TimerState();
+    } else if (!_states.containsKey(key)) {
+      _states[key] = TimerState();
+    }
+    return _states[key]!;
+  }
+
+  static TimerState state(Key key) {
+    return of(key);
+  }
+}
+
 /// Used to launch a count-down timer of [duration] and give an UI feedback
 ///
 /// It will launch a timer of [duration] and call the [onFinished] function
@@ -24,8 +85,6 @@ import 'package:flutter/material.dart';
 /// method.
 class TimerWidget extends StatefulWidget {
 
-
-
   const TimerWidget({
     Key? key,
     required this.onFinished,
@@ -44,7 +103,8 @@ class TimerWidget extends StatefulWidget {
 class TimerWidgetState extends State<TimerWidget> with SingleTickerProviderStateMixin {
 
   late AnimationController animController;
-
+  late VoidCallback animListener;
+  late VoidCallback stateListener;
 
   @override
   void initState() {
@@ -52,13 +112,35 @@ class TimerWidgetState extends State<TimerWidget> with SingleTickerProviderState
     animController = AnimationController(
       vsync: this,
       duration: widget.duration
-    )..forward().then((_) { // when the animation ends
-      widget.onFinished();
-    });
+    );
+    final TimerState state = TimerScope.of(widget.key);
+    if (state.isPlaying) {
+      animController.forward(from: state.current);
+    }
+
+    stateListener = () {
+      if (state.isPlaying) {
+        animController.forward(from: state.current);
+      } else if (state.isPaused) {
+        animController.stop();
+      }
+    };
+    state.addListener(stateListener);
+
+    animListener = () {
+      if (animController.status == AnimationStatus.completed && !state.isFinished) {
+        state.finished();
+        widget.onFinished();
+      }
+      state.current = animController.value;
+    };
+    animController.addListener(animListener);
   }
 
   @override
   void dispose() {
+    TimerScope.of(widget.key).removeListener(stateListener);
+    animController.removeListener(animListener);
     animController.dispose(); // cancel the animation to prevent memory leaks
     super.dispose();
   }

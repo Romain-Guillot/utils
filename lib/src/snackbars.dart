@@ -13,7 +13,10 @@ void showSuccessSnackbar({
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).successColor,
-    content: content,
+    content: DefaultTextStyle.merge(
+      style: TextStyle(color: ThemeExtension.of(context).onSuccessColor),
+      child: content
+    ),
   ));
 }
 
@@ -28,6 +31,9 @@ void showErrorSnackbar({
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).errorColor,
-    content: content,
+    content: DefaultTextStyle.merge(
+      style: TextStyle(color: ThemeExtension.of(context).onErrorColor),
+      child: content
+    ),
   ));
 }
