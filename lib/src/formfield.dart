@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 
 
@@ -66,6 +67,37 @@ class DateTimeFormField extends FormField<DateTime> {
           if (state.hasError)
             Text(state.errorText!, style: Theme.of(context).inputDecorationTheme.errorStyle)
         ],
+      );
+    }
+  );
+}
+
+
+
+class ColorPickerFormField extends FormField<Color> {
+  ColorPickerFormField({
+    Key? key,
+    FormFieldSetter<Color>? onSaved,
+    FormFieldValidator<Color>? validator,
+    Color? initialValue
+  }) : super(
+    key: key,
+    initialValue: initialValue,
+    onSaved: onSaved,
+    validator: validator,
+    builder: (FormFieldState<Color> state) {
+      final BuildContext context = state.context;
+      return IconButton(
+        onPressed: () {
+          showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+            scrollable: true,
+            content: SingleChildScrollView(child: ColorPicker(
+              pickerColor: Colors.red,
+              onColorChanged: (Color value) => null,
+            )),
+          ));
+        },
+        icon: CircleAvatar(backgroundColor: Colors.red)
       );
     }
   );
