@@ -25,6 +25,12 @@ class ProviderValue<T> {
   
   bool get isInitialized => _initialized  == true;
   bool? _initialized;
+
+  void reset()  {
+    _data = null;
+    _error = null;
+    _initialized = false;
+  }
 }
 
 

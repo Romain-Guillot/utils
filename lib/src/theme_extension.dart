@@ -15,6 +15,8 @@ class ThemeDataExtension {
     required this.bigBorderRadius,
     required this.mobileScreenMax,
     required this.barrierColor,
+    required this.pageMargin,
+    required this.backgroundVariant
   });
 
   final Color errorColor;
@@ -29,6 +31,8 @@ class ThemeDataExtension {
   final BorderRadius bigBorderRadius;
   final double mobileScreenMax;
   final Color barrierColor;
+  final EdgeInsets pageMargin;
+  final Color backgroundVariant;
 }
 
 

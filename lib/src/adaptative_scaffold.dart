@@ -38,7 +38,7 @@ class AdaptativeScaffold extends StatelessWidget {
   const AdaptativeScaffold({
     Key? key,
     this.appBar,
-    this.body,
+    required this.body,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.floatingActionButtonAnimator,
@@ -59,6 +59,7 @@ class AdaptativeScaffold extends StatelessWidget {
     this.drawerEnableOpenDragGesture = true,
     this.endDrawerEnableOpenDragGesture = true,
     this.navigation,
+    this.maxBodyWidth,
   }) : super(key: key);
   
   final bool extendBody;
@@ -81,9 +82,9 @@ class AdaptativeScaffold extends StatelessWidget {
   final double? drawerEdgeDragWidth;
   final bool drawerEnableOpenDragGesture;
   final bool endDrawerEnableOpenDragGesture;
-  final Widget? body;
+  final Widget body;
   final AdaptativeNavigation? navigation;
-
+  final double? maxBodyWidth;
 
   Widget? _buildNavigationRail(BuildContext context, AdaptativeNavigation navigation) {
     return LinearNavigationRail(
@@ -149,18 +150,23 @@ class AdaptativeScaffold extends StatelessWidget {
           primary: primary,
           resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           body:  Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               navigationRail??Container(),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: double.maxFinite,
-                    constraints: BoxConstraints(maxWidth: 1000),
-                    child: body
+              if (maxBodyWidth == null)
+                Expanded(child: body)
+              else 
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: double.maxFinite,
+                      constraints: BoxConstraints(maxWidth: maxBodyWidth!),
+                      child: body
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         );

@@ -18,15 +18,10 @@ class InteractiveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: borderRadius??ThemeExtension.of(context).mediumBorderRadius,
-      color: Theme.of(context).primaryColorDark,
-      child: InkWell(
-        onTap: onTap,
-        onLongPress: onLongPress,
-        borderRadius: borderRadius??ThemeExtension.of(context).mediumBorderRadius,
-        child: child
-      ),
+    return  InkWell(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: child
     );
   }
 }
