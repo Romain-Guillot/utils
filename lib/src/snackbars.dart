@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:utils/src/provider_event.dart';
 import 'package:utils/src/theme_extension.dart';
 
 
@@ -36,4 +37,17 @@ void showErrorSnackbar({
       child: content
     ),
   ));
+}
+
+
+
+void showEventSnackbar(BuildContext context, ProviderEvent<Event> providerEvent, {Widget? success, Widget? error}) {
+  if (providerEvent.hasEvent) {
+    final Event? event = providerEvent.consumeEvent();
+    if (event?.type == EventType.success) {
+      showSuccessSnackbar(context: context, content: success??Text('Success'));
+    } else if (event?.type == EventType.error) {
+      showErrorSnackbar(context: context, content: error??Text('${event?.error}'));
+    }
+  }
 }

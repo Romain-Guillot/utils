@@ -27,12 +27,14 @@ enum EventType {
 class Event {
   const Event({
     required this.type,
-    this.error
+    this.error,
+    this.stackTrace
   });
 
   const Event.success() : this(type: EventType.success, error: null);
-  const Event.error(dynamic e) : this(type: EventType.error, error: e);
+  const Event.error(dynamic e, [StackTrace? s]) : this(type: EventType.error, error: e, stackTrace: s);
 
   final EventType type;
   final dynamic? error;
+  final StackTrace? stackTrace;
 }
