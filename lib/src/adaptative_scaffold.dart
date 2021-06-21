@@ -234,7 +234,7 @@ class LinearNavigationRail extends StatelessWidget {
                     PaddingSpacer(type: PaddingType.small),
                     DefaultTextStyle(
                       style: isSelected ? selectedLabelStyle : labelStyle,
-                      child: item.value.label!
+                      child: item.value.label
                     )
                   ],
                 ),

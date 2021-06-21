@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:utils/src/theme_extension.dart';
-import 'package:mime/mime.dart' as mime_type;
 
 class DateTimeFormField extends FormField<DateTime> {
   DateTimeFormField({
@@ -144,7 +143,7 @@ class ImageFormField extends FormField<ImageFormData> {
         if (result != null) {
           state.didChange(ImageFormData(
             data: result.files.first.bytes!,
-            filename: result.files.first.name!
+            filename: result.files.first.name
           ));
         }
       }

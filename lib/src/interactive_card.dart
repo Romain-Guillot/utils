@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:utils/src/theme_extension.dart';
 
 
 class InteractiveCard extends StatelessWidget {
