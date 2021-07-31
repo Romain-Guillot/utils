@@ -4,13 +4,13 @@ import 'package:utils/src/provider_event.dart';
 import 'package:utils/src/theme_extension.dart';
 
 
-void showSuccessSnackbar({
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason>  showSuccessSnackbar({
   required BuildContext context,
   required Widget content,
   SnackBarAction? action,
   Animation<double>? animation,
 }) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).successColor,
@@ -22,13 +22,13 @@ void showSuccessSnackbar({
 }
 
 
-void showErrorSnackbar({
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackbar({
   required BuildContext context,
   required Widget content,
   SnackBarAction? action,
   Animation<double>? animation,
 }) {
-  ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
+  return ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).errorColor,
@@ -41,13 +41,36 @@ void showErrorSnackbar({
 
 
 
-void showEventSnackbar(BuildContext context, ProviderEvent<Event> providerEvent, {Widget? success, Widget? error}) {
-  if (providerEvent.hasEvent) {
-    final Event? event = providerEvent.consumeEvent();
-    if (event?.type == EventType.success) {
-      showSuccessSnackbar(context: context, content: success??Text('Success'));
-    } else if (event?.type == EventType.error) {
-      showErrorSnackbar(context: context, content: error??Text('${event?.error}'));
+// void showEventSnackbar(BuildContext context, ProviderEvent<Event> providerEvent, {Widget? success, Widget? error}) {
+//   if (providerEvent.hasEvent) {
+//     final Event? event = providerEvent.consumeEvent();
+//     if (event?.type == EventType.success) {
+//       showSuccessSnackbar(context: context, content: success??Text('Success'));
+//     } else if (event?.type == EventType.error) {
+//       showErrorSnackbar(context: context, content: error??Text('${event?.error}'));
+//     }
+//   }
+// }
+
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showEventSnackbar(BuildContext context, {
+  required ProviderEvent<Event> event,
+  String? successMessage,
+  String? errorMessage, 
+}) {
+  if (event.hasEvent) {
+    final Event? eventValue = event.consumeEvent();
+    if (eventValue != null) {
+      switch (eventValue.type) {
+        case EventType.success:
+          if (successMessage != null)
+            return showSuccessSnackbar(context: context, content: Text(successMessage));
+          break;
+        case EventType.error:
+          if (errorMessage != null)
+            return showErrorSnackbar(context: context, content: Text(errorMessage));
+          break;
+      }
     }
   }
+  return null;
 }
