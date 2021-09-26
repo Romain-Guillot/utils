@@ -24,13 +24,13 @@ class AdaptativeNavigation {
     required this.selected,
     required this.items,
     required this.onChange,
-    required this.header,
+    this.header,
   });
 
   final int selected;
   final List<NavigationItem> items;
   final void Function(int index) onChange;
-  final Widget header;
+  final Widget? header;
 }
 
 
@@ -60,6 +60,7 @@ class AdaptativeScaffold extends StatelessWidget {
     this.endDrawerEnableOpenDragGesture = true,
     this.navigation,
     this.maxBodyWidth,
+    this.navigationRailDecoration,
   }) : super(key: key);
   
   final bool extendBody;
@@ -85,6 +86,8 @@ class AdaptativeScaffold extends StatelessWidget {
   final Widget body;
   final AdaptativeNavigation? navigation;
   final double? maxBodyWidth;
+  final BoxDecoration? navigationRailDecoration;
+
 
   Widget? _buildNavigationRail(BuildContext context, AdaptativeNavigation navigation) {
     return LinearNavigationRail(
@@ -153,7 +156,11 @@ class AdaptativeScaffold extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              navigationRail??Container(),
+              if (navigationRail != null)
+                Container(
+                  decoration: navigationRailDecoration,
+                  child: navigationRail
+                ),
               if (maxBodyWidth == null)
                 Expanded(child: body)
               else 
@@ -219,24 +226,31 @@ class LinearNavigationRail extends StatelessWidget {
             ),
           ...items.asMap().entries.map((MapEntry<int, NavigationRailDestination> item) {
             final bool isSelected = selectedIndex == item.key;
-            return InkWell(
-              onTap: () => onDestinationSelected?.call(item.key),
-              child: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.all(ThemeExtension.of(context).padding),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconTheme(
-                      data: isSelected ? selectedIconTheme : iconTheme,
-                      child: isSelected ? item.value.selectedIcon : item.value.icon
+            return Material(
+              color: isSelected ? selectedLabelStyle.color?.withOpacity(0.1) : Colors.transparent,
+              child: InkWell(
+                onTap: () => onDestinationSelected?.call(item.key),
+                child: IconTheme(
+                  data: isSelected ? selectedIconTheme : iconTheme,
+                  child: Container(
+                    width: double.maxFinite,
+                    padding: EdgeInsets.all(ThemeExtension.of(context).padding),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        isSelected ? item.value.selectedIcon : item.value.icon,
+                        PaddingSpacer(type: PaddingType.small),
+                        Expanded(
+                          child: DefaultTextStyle(
+                            style: isSelected ? selectedLabelStyle : labelStyle,
+                            child: item.value.label
+                          ),
+                        ),
+                        if (isSelected)
+                          Icon(Icons.keyboard_arrow_right_sharp)
+                      ],
                     ),
-                    PaddingSpacer(type: PaddingType.small),
-                    DefaultTextStyle(
-                      style: isSelected ? selectedLabelStyle : labelStyle,
-                      child: item.value.label
-                    )
-                  ],
+                  ),
                 ),
               ),
             );

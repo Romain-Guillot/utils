@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:utils/utils.dart';
 
 
 class ThemeDataExtension {
@@ -16,7 +17,9 @@ class ThemeDataExtension {
     required this.mobileScreenMax,
     required this.barrierColor,
     required this.pageMargin,
-    required this.backgroundVariant
+    required this.backgroundVariant,
+    required this.maxPageWidth,
+    this.dataGridTheme,
   });
 
   final Color errorColor;
@@ -33,6 +36,8 @@ class ThemeDataExtension {
   final Color barrierColor;
   final EdgeInsets pageMargin;
   final Color backgroundVariant;
+  final double maxPageWidth;
+  final DataGridTheme? dataGridTheme;
 }
 
 
