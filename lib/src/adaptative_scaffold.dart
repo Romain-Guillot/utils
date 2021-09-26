@@ -239,7 +239,7 @@ class LinearNavigationRail extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         isSelected ? item.value.selectedIcon : item.value.icon,
-                        PaddingSpacer(type: PaddingType.small),
+                        PaddingSpacer(type: PaddingType.normal),
                         Expanded(
                           child: DefaultTextStyle(
                             style: isSelected ? selectedLabelStyle : labelStyle,
