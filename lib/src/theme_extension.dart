@@ -20,6 +20,7 @@ class ThemeDataExtension {
     required this.backgroundVariant,
     required this.maxPageWidth,
     this.dataGridTheme,
+    this.snackbarMaxSize = 800
   });
 
   final Color errorColor;
@@ -38,6 +39,7 @@ class ThemeDataExtension {
   final Color backgroundVariant;
   final double maxPageWidth;
   final DataGridTheme? dataGridTheme;
+  final double snackbarMaxSize;
 }
 
 

@@ -9,4 +9,12 @@ extension ListSwap<T> on List<T> {
       this[index2] = tmp1;
     }
   }
+
+  T? get maybeFirst {
+    try {
+      return first;
+    } on StateError catch (e) {
+      return null;
+    }
+  }
 }

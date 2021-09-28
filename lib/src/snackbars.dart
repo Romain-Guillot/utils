@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:utils/src/provider_event.dart';
 import 'package:utils/src/theme_extension.dart';
 
+const EdgeInsets kSnakbarDefaultMargin = EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0);
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason>  showSuccessSnackbar({
   required BuildContext context,
@@ -11,6 +12,9 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>  showSuccessSnackbar({
   Animation<double>? animation,
 }) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    width: ThemeExtension.of(context).snackbarMaxSize,
+    margin: kSnakbarDefaultMargin,
+    behavior: SnackBarBehavior.floating,
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).successColor,
@@ -29,6 +33,9 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackbar({
   Animation<double>? animation,
 }) {
   return ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
+    width: ThemeExtension.of(context).snackbarMaxSize,
+    margin: kSnakbarDefaultMargin,
+    behavior: SnackBarBehavior.floating,
     action: action,
     animation: animation,
     backgroundColor: ThemeExtension.of(context).errorColor,
