@@ -15,6 +15,9 @@ class PaddingSpacer extends StatelessWidget {
 
   final PaddingType type;
 
+  factory PaddingSpacer.small() => PaddingSpacer(type: PaddingType.small);
+  factory PaddingSpacer.big() => PaddingSpacer(type: PaddingType.big);
+
   double getPaddingValue(BuildContext context) {
     switch (type) {
       case PaddingType.normal: return ThemeExtension.of(context).padding;

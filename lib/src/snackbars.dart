@@ -12,7 +12,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>  showSuccessSnackbar({
   Animation<double>? animation,
 }) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    width: ThemeExtension.of(context).snackbarMaxSize,
+    // width: ThemeExtension.of(context).snackbarMaxSize,
     margin: kSnakbarDefaultMargin,
     behavior: SnackBarBehavior.floating,
     action: action,
@@ -33,7 +33,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackbar({
   Animation<double>? animation,
 }) {
   return ScaffoldMessenger.maybeOf(context)!.showSnackBar(SnackBar(
-    width: ThemeExtension.of(context).snackbarMaxSize,
+    // width: ThemeExtension.of(context).snackbarMaxSize.isNaN ? null : ThemeExtension.of(context).snackbarMaxSize,
     margin: kSnakbarDefaultMargin,
     behavior: SnackBarBehavior.floating,
     action: action,

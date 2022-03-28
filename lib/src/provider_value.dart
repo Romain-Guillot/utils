@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:utils/src/theme_extension.dart';
 
 class ProviderValue<T> {
 
@@ -66,12 +67,27 @@ class ProviderValueBuilder<T> extends StatelessWidget {
 
 
 class DefaultLoadingWidget extends StatelessWidget {
-  const DefaultLoadingWidget({Key? key}) : super(key: key);
+  const DefaultLoadingWidget({
+    Key? key,
+    this.label
+  }) : super(key: key);
+
+  final Widget? label;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(),
+    return  Row(
+      children: [
+        CircularProgressIndicator(),
+        if (label != null)
+          DefaultTextStyle.merge(
+            style: Theme.of(context).textTheme.bodyText1 ?? TextStyle(),
+            child: Padding(
+              padding: EdgeInsets.only(left: ThemeExtension.of(context).padding),
+              child: label
+            ),
+          )
+      ],
     );
   }
 }

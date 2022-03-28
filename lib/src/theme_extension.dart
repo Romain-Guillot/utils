@@ -8,6 +8,8 @@ class ThemeDataExtension {
     required this.onErrorColor,
     required this.successColor,
     required this.onSuccessColor,
+    required this.onWarningColor,
+    required this.warningColor,
     required this.padding,
     required this.paddingBig,
     required this.paddingSmall,
@@ -27,6 +29,8 @@ class ThemeDataExtension {
   final Color onErrorColor;
   final Color successColor;
   final Color onSuccessColor;
+  final Color warningColor;
+  final Color onWarningColor;
   final double padding;
   final double paddingSmall;
   final double paddingBig;
