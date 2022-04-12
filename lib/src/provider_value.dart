@@ -1,67 +1,99 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:utils/src/padding.dart';
 import 'package:utils/src/theme_extension.dart';
 
-class ProviderValue<T> {
+class ProviderValue<T, K> {
+  ProviderValue();
+  
+  ProviderValue.fromValue(T? value) {
+    this.value = value;
+  }
 
-  T? _data;
-  T? get data => _data;
-  set data(T? data) {
+  T? _value;
+  set value(T? value) {
+    _value = value;
     _initialized = true;
-    _data = data;
     _error = null;
   }
-
-  String? _error;
-  String? get error => _error;
-  set error(String? error) {
-    _initialized = true;
-    _error = error;
-    _data = null;
+  T? get value => _value;
+  bool get hasData {
+    if (value is Iterable) {
+      return value != null && (value as Iterable<dynamic>).isNotEmpty;
+    } else {
+      return value != null;
+    }
   }
 
+
+  K? _error;
+  set error(K? error) {
+    _error = error;
+    _initialized = true;
+    _value = null;
+  }
+  K? get error => _error;
   bool get hasError => _error != null;
 
-  bool get isEmpty => data == null || (data is Iterable && (data! as Iterable<dynamic>).isEmpty) || (data is Map && (data! as Map<dynamic, dynamic>).isEmpty); 
-  
-  bool get isInitialized => _initialized  == true;
-  bool? _initialized;
 
-  void reset()  {
-    _data = null;
+  bool? _initialized;
+  bool get isInitialized => _initialized == true;
+  bool get isNotInitialized => !isInitialized;
+
+  void reset() {
     _error = null;
+    _value = null;
     _initialized = false;
   }
 }
 
 
-class ProviderValueBuilder<T> extends StatelessWidget {
+
+/// [EmptyDataWidget]
+/// [ErrorDataWidget]
+/// [LoadingDataWidget]
+class ProviderValueBuilder<T, K> extends StatelessWidget {
   const ProviderValueBuilder({
     Key? key,
     required this.value,
     required this.dataBuilder,
-    this.emptyDataBuilder,
-    this.loadingBuilder,
     this.errorBuilder,
+    this.loadingBuilder,
+    this.emptyDataBuilder,
+    this.isSliver = false
   }) : super(key: key);
 
-  final ProviderValue<T> value;
-  final Widget Function(BuildContext context, T? data) dataBuilder;
-  final Widget Function(BuildContext context)? emptyDataBuilder;
+  final ProviderValue<T, K> value;
+
+  final bool isSliver;
   final Widget Function(BuildContext context)? loadingBuilder;
-  final Widget Function(BuildContext context, String? error)? errorBuilder;
+  final Widget Function(BuildContext context, K? error)? errorBuilder;
+  final Widget Function(BuildContext context, T? value) dataBuilder;
+  final Widget Function(BuildContext context)? emptyDataBuilder;
 
   @override
   Widget build(BuildContext context) {
-    if (!value.isInitialized) {
-      return loadingBuilder?.call(context)??DefaultLoadingWidget();
-    } else if (value.hasError) {
-      return errorBuilder?.call(context, value.error)??DefaultErrorWidget(error: value.error,);
-    } else if (emptyDataBuilder != null && value.isEmpty) {
-      return emptyDataBuilder!.call(context);
+    Widget child;
+    if (value.hasError) {
+      child = errorBuilder != null 
+        ? errorBuilder!(context, value.error) 
+        : DefaultErrorWidget(error: value.error.toString());
+    } else if (!value.isInitialized) {
+      child =  loadingBuilder != null 
+        ? loadingBuilder!(context) 
+        : DefaultLoadingWidget();
+    } else if (emptyDataBuilder != null && !value.hasData) {
+      child = emptyDataBuilder != null 
+        ? emptyDataBuilder!.call(context) 
+        : DefaultEmptyDataWidget(child: Text('no data'));
     } else {
-      return dataBuilder.call(context, value.data);
+      return dataBuilder(context, value.value);
     }
+    if (isSliver) {
+      child  = SliverToBoxAdapter(child: child);
+    }
+    return child;
+
   }
 }
 
@@ -77,6 +109,8 @@ class DefaultLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircularProgressIndicator(),
         if (label != null)
@@ -105,6 +139,43 @@ class DefaultErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(error!),
+    );
+  }
+}
+
+
+class DefaultEmptyDataWidget extends StatelessWidget {
+  const DefaultEmptyDataWidget({
+    Key? key,
+    required this.child,
+    this.refreshButtonLabel,
+    this.onRefresh,
+  }) : super(key: key);
+
+  final Widget child;
+  final String? refreshButtonLabel;
+  final VoidCallback? onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          DefaultTextStyle.merge(
+            style: Theme.of(context).textTheme.caption,
+            child: child
+          ),
+          PaddingSpacer(),
+          if (onRefresh != null)
+            TextButton.icon(
+              onPressed: onRefresh,
+              icon: Icon(Icons.refresh), 
+              label: Text(refreshButtonLabel??'Refresh'),
+            )
+        ],
+      ),
     );
   }
 }

@@ -21,8 +21,11 @@ class ThemeDataExtension {
     required this.pageMargin,
     required this.backgroundVariant,
     required this.maxPageWidth,
+    required this.smallComponentPadding,
+    required this.mediumComponentPadding,
     this.dataGridTheme,
-    this.snackbarMaxSize = 800
+    this.snackbarMaxSize = 800,
+    this.tooltipTheme
   });
 
   final Color errorColor;
@@ -34,6 +37,8 @@ class ThemeDataExtension {
   final double padding;
   final double paddingSmall;
   final double paddingBig;
+  final double smallComponentPadding;
+  final double mediumComponentPadding;
   final BorderRadius smallBorderRadius;
   final BorderRadius mediumBorderRadius;
   final BorderRadius bigBorderRadius;
@@ -44,6 +49,7 @@ class ThemeDataExtension {
   final double maxPageWidth;
   final DataGridTheme? dataGridTheme;
   final double snackbarMaxSize;
+  final OTooltipThemeData? tooltipTheme;
 }
 
 
@@ -65,4 +71,17 @@ class ThemeExtension extends InheritedWidget {
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
 
+}
+
+
+class OTooltipThemeData {
+  const OTooltipThemeData({
+    this.backgroundColor,
+    this.style,
+    this.padding
+  });
+
+  final Color? backgroundColor;
+  final TextStyle? style;
+  final EdgeInsets? padding;
 }

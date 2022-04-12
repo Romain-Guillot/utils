@@ -18,11 +18,22 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   file_picker: ^4.3.3
   mime: ^1.0.1
-  flutter_riverpod: ^1.0.3
+  dio: ^4.0.4
+  retrofit: ^3.0.1+1
+  flutter_riverpod: ^2.0.0-dev.5
+  freezed_annotation: ^1.1.0
+  flutter_svg: ^1.0.3
+  auto_size_text: ^3.0.0
+  sliver_tools: ^0.2.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  retrofit_generator: ^4.0.1
+  build_runner: ^2.1.8
+  flutter_lints: ^1.0.0
+  json_serializable: ^6.1.5
+  freezed: ^1.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

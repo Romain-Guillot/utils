@@ -1,5 +1,12 @@
 library utils;
 
+export 'package:dio/dio.dart';
+export 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:flutter_svg/flutter_svg.dart';
+export 'package:freezed_annotation/freezed_annotation.dart';
+export 'package:retrofit/retrofit.dart' hide Headers;
+export 'package:riverpod/riverpod.dart';
+
 export 'src/adaptative_builder.dart';
 export 'src/adaptative_scaffold.dart';
 export 'src/bottom_action_bar.dart';
